@@ -52,7 +52,8 @@ const exec = (text) => {
       borderColor: commander.borderColor,
       localFontPath: commander.localFontPath,
       localFontName: commander.localFontName,
-      output: 'stream'
+      output: 'stream',
+      rotate: commander.rotate
     });
     const outputPath = path.resolve(process.cwd(), commander.output);
     stream.pipe(fs.createWriteStream(outputPath));

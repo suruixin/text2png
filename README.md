@@ -13,10 +13,18 @@ text2png('Create png image\nfrom multi-line text!');
 ## Quick start
 
 text2png depends on [node-canvas](https://github.com/Automattic/node-canvas).
-See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on installing node-canvas.
+
+With [node-canvas](https://github.com/Automattic/node-canvas).
+(See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on installing node-canvas.)
 
 ```
 $ npm install text2png
+```
+
+With [node-canvas-prebuilt](https://github.com/node-gfx/node-canvas-prebuilt)
+
+```
+$ npm install text2png@prebuilt
 ```
 
 ```js
@@ -46,8 +54,6 @@ fs.writeFileSync('out.png', text2png('Hello!', {color: 'blue'}));
 |option.localFontName||
 |option.output|'buffer'|
 
-``option.color = '#000' | 'rgb(0, 0, 0)' | 'black' | ...``
-
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
 
 ``'canvas'`` returns [node-canvas](https://github.com/Automattic/node-canvas) object.
@@ -65,7 +71,7 @@ text2png('with custom fonts', {
 ## Command line interface
 
 ```
-$ npm install -g text2png
+$ npm install -g text2png@next
 $ text2png --help
 $ text2png -t "Hello!" -o "output.png"
 ```

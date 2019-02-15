@@ -73,10 +73,19 @@ const text2png = (text, options = {}) => {
   canvas.width = contentWidth
     + options.borderLeftWidth + options.borderRightWidth
     + options.paddingLeft + options.paddingRight;
-
-  canvas.height = contentHeight
+  let rotateHeight = 0
+  if (options.rotate !== 0) {
+    rotateHeight = Math.abs(Math.sin(options.rotate) * contentWidth) + (isNaN(parseInt(options.font)) ? 0 : parseInt(options.font) * lineProps.length)
+  }
+  canvas.height = rotateHeight ? rotateHeight : (contentHeight
     + options.borderTopWidth + options.borderBottomWidth
-    + options.paddingTop + options.paddingBottom;
+    + options.paddingTop + options.paddingBottom);
+
+  if (options.rotate !== 0 && canvas.height > canvas.width) {
+    canvas.width = canvas.height
+  } else if (options.rotate !== 0) {
+    canvas.height = canvas.width
+  }
 
   const hasBorder = false
     || options.borderLeftWidth
@@ -112,6 +121,7 @@ const text2png = (text, options = {}) => {
   ctx.textAlign = options.textAlign;
 
   let offsetY = options.borderTopWidth + options.paddingTop;
+  ctx.rotate(options.rotate)
   lineProps.forEach(lineProp => {
     // Calculate Y
     let x = 0;
@@ -123,7 +133,6 @@ const text2png = (text, options = {}) => {
       case "left":
         x = lineProp.left + options.borderLeftWidth + options.paddingLeft;
         break;
-
       case "end":
       case "right":
         x = canvas.width - lineProp.left - options.borderRightWidth - options.paddingRight;
@@ -133,11 +142,22 @@ const text2png = (text, options = {}) => {
         x = contentWidth / 2 + options.borderLeftWidth + options.paddingLeft;
         break;
     }
-
+    if (options.rotate) {
+      let xExcursion = (canvas.height) / 2;
+      let yExcursion;
+      if (options.rotate < 0) { // 逆时针旋转
+        yExcursion = (canvas.height - lineProps.length * (isNaN(parseInt(options.font)) ? 0 : parseInt(options.font))) / 2;
+        x =  yExcursion * Math.cos(Math.abs(options.rotate)) - yExcursion * Math.sin(Math.abs(options.rotate));
+        y += yExcursion * Math.sin(Math.abs(options.rotate)) + yExcursion * Math.cos(Math.abs(options.rotate))
+      } else {
+        yExcursion = (canvas.height + lineProps.length * (isNaN(parseInt(options.font)) ? 0 : parseInt(options.font))) / 2;
+        x = yExcursion * Math.cos(Math.abs(options.rotate)) + xExcursion * Math.sin(Math.abs(options.rotate));
+        y += xExcursion * Math.sin(Math.abs(options.rotate)) - yExcursion * Math.cos(Math.abs(options.rotate))
+      }
+    }
     ctx.fillText(lineProp.line, x, y);
     offsetY += lineHeight;
   });
-
   switch (options.output) {
     case 'buffer':
       return canvas.toBuffer();
@@ -171,7 +191,8 @@ function parseOptions(options) {
     textColor           : options.textColor || options.color || 'black',
     output              : options.output || 'buffer',
     localFontName       : options.localFontName || null,
-    localFontPath       : options.localFontPath || null
+    localFontPath       : options.localFontPath || null,
+    rotate              : (Math.PI / 180 * options.rotate) || 0
   };
 }
 
