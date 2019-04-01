@@ -53,6 +53,7 @@ fs.writeFileSync('out.png', text2png('Hello!', {color: 'blue'}));
 |option.localFontPath||
 |option.localFontName||
 |option.output|'buffer'|
+|option.rotate|0|
 
 ``option.output = 'buffer' | 'stream' | 'dataURL' | 'canvas'``
 
