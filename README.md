@@ -4,6 +4,8 @@
 
 # text2png: text-to-png generator for Node.js
 
+The original address: https://github.com/tkrkt/text2png
+
 ```js
 text2png('Create png image\nfrom multi-line text!');
 ```
@@ -18,7 +20,7 @@ With [node-canvas](https://github.com/Automattic/node-canvas).
 (See [node-canvas wiki](https://github.com/Automattic/node-canvas/wiki) on installing node-canvas.)
 
 ```
-$ npm install text2png
+$ npm install text2png-rotate
 ```
 
 With [node-canvas-prebuilt](https://github.com/node-gfx/node-canvas-prebuilt)
